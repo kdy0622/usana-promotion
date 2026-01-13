@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Calculator, 
@@ -37,87 +37,101 @@ const App: React.FC = () => {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden justify-center px-6">
-        <div className="text-center mb-8">
-          <div className="bg-indigo-600 w-16 h-16 rounded-2xl flex items-center justify-center shadow-indigo-200 shadow-xl mx-auto mb-4">
-            <span className="text-white font-bold text-3xl">U</span>
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm space-y-8 animate-fadeIn">
+          <div className="text-center">
+            <div className="bg-indigo-600 w-20 h-20 rounded-3xl flex items-center justify-center shadow-2xl shadow-indigo-200 mx-auto mb-6 transform rotate-3">
+              <span className="text-white font-bold text-4xl">U</span>
+            </div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">2026 프로모션 마스터</h1>
+            <p className="text-slate-500 mt-2 font-medium">성공을 위한 비즈니스 가이드</p>
           </div>
-          <h1 className="text-2xl font-bold text-slate-800">유사나 프로모션 마스터</h1>
-          <p className="text-slate-500 text-sm mt-1">by dreamon</p>
-        </div>
 
-        <form onSubmit={handleLogin} className="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">회원번호</label>
-            <div className="relative">
-              <LogIn className="absolute left-3 top-3 w-5 h-5 text-slate-300" />
-              <input 
-                required
-                type="text" 
-                placeholder="Membership ID"
-                value={memberId}
-                onChange={(e) => setMemberId(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
-              />
+          <form onSubmit={handleLogin} className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-5">
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Membership ID</label>
+              <div className="relative">
+                <LogIn className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                <input 
+                  required
+                  type="text" 
+                  placeholder="회원번호 입력"
+                  value={memberId}
+                  onChange={(e) => setMemberId(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none font-semibold"
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">성명</label>
-            <div className="relative">
-              <UserIcon className="absolute left-3 top-3 w-5 h-5 text-slate-300" />
-              <input 
-                required
-                type="text" 
-                placeholder="Full Name"
-                value={userProfile.name}
-                onChange={(e) => setUserProfile({...userProfile, name: e.target.value})}
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
-              />
+            <div>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Name</label>
+              <div className="relative">
+                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                <input 
+                  required
+                  type="text" 
+                  placeholder="성함 입력"
+                  value={userProfile.name}
+                  onChange={(e) => setUserProfile({...userProfile, name: e.target.value})}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none font-semibold"
+                />
+              </div>
             </div>
-          </div>
-          <button 
-            type="submit"
-            className="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all mt-4"
-          >
-            마스터 시작하기
-          </button>
-        </form>
-        <p className="text-center text-[10px] text-slate-400 mt-8 uppercase tracking-widest">
-          © 2026 USANA KOREA PROMOTION MASTER
-        </p>
+            <button 
+              type="submit"
+              className="w-full bg-indigo-600 text-white font-bold py-5 rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all mt-4 text-lg"
+            >
+              시작하기
+            </button>
+          </form>
+          <p className="text-center text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+            © 2026 dreamon coach
+          </p>
+        </div>
       </div>
     );
   }
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard userProfile={userProfile} />;
-      case 'calc':
-        return <SmartCalculator userProfile={userProfile} />;
-      case 'coach':
-        return <AICoach userProfile={userProfile} />;
-      case 'timeline':
-        return (
-          <div className="p-4 space-y-6 animate-fadeIn">
-            <h2 className="text-2xl font-bold text-slate-800">통합 프로모션 타임라인</h2>
-            <div className="bg-indigo-600 text-white p-4 rounded-xl shadow-lg flex items-center gap-3">
-              <Zap className="w-6 h-6 fill-yellow-300 text-yellow-300" />
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl relative">
+      <header className="bg-white/80 backdrop-blur-md px-5 py-4 border-b border-slate-100 flex justify-between items-center sticky top-0 z-[60]">
+        <div className="flex items-center gap-3">
+          <div className="bg-indigo-600 w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-100">
+            <span className="text-white font-bold text-lg">U</span>
+          </div>
+          <div>
+            <h1 className="font-bold text-[15px] text-slate-900 leading-tight">2026 프로모션</h1>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Status Master</p>
+          </div>
+        </div>
+        <button className="relative p-2 text-slate-400">
+          <Bell className="w-6 h-6" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+        </button>
+      </header>
+
+      <main className="flex-1 overflow-y-auto pb-28">
+        {activeTab === 'dashboard' && <Dashboard userProfile={userProfile} />}
+        {activeTab === 'calc' && <SmartCalculator userProfile={userProfile} />}
+        {activeTab === 'coach' && <AICoach userProfile={userProfile} />}
+        {activeTab === 'timeline' && (
+          <div className="p-5 space-y-6 animate-fadeIn">
+            <h2 className="text-2xl font-bold text-slate-900">프로모션 타임라인</h2>
+            <div className="bg-indigo-600 text-white p-5 rounded-[2rem] shadow-xl flex items-center gap-4">
+              <Zap className="w-8 h-8 fill-yellow-300 text-yellow-300" />
               <div>
-                <p className="font-bold">현재는 '골든 쿼터' 집중 기간!</p>
-                <p className="text-sm opacity-90 text-indigo-100">최대 5개 프로모션이 중첩됩니다. 지금이 기회입니다.</p>
+                <p className="font-bold text-lg">골든 쿼터 진행 중!</p>
+                <p className="text-xs opacity-90 text-indigo-100 font-medium">가장 많은 혜택이 중첩되는 시기입니다.</p>
               </div>
             </div>
-            
             <div className="space-y-4">
               {ACTION_PLANS.map((plan, idx) => (
-                <div key={idx} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
-                  <p className="text-indigo-600 font-bold text-sm mb-1">{plan.week}</p>
-                  <h3 className="font-bold text-slate-800 mb-2">{plan.task}</h3>
+                <div key={idx} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden transition-all hover:shadow-md">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500"></div>
+                  <p className="text-indigo-600 font-extrabold text-xs mb-2 tracking-wide">{plan.week}</p>
+                  <h3 className="font-bold text-slate-800 text-base mb-3 leading-snug">{plan.task}</h3>
                   <div className="flex flex-wrap gap-2">
                     {plan.impacts.map((impact, i) => (
-                      <span key={i} className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
+                      <span key={i} className="text-[10px] bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-lg font-bold">
                         #{impact}
                       </span>
                     ))}
@@ -126,51 +140,25 @@ const App: React.FC = () => {
               ))}
             </div>
           </div>
-        );
-      default:
-        return <Dashboard userProfile={userProfile} />;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-50 flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden relative">
-      <header className="bg-white px-4 py-4 border-b border-slate-100 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <div className="bg-indigo-600 w-8 h-8 rounded-lg flex items-center justify-center shadow-indigo-200 shadow-lg">
-            <span className="text-white font-bold">U</span>
-          </div>
-          <div>
-            <h1 className="font-bold text-sm text-slate-800">유사나 프로모션 마스터</h1>
-            <p className="text-[9px] text-slate-400 -mt-0.5">by dreamon</p>
-          </div>
-        </div>
-        <button className="relative p-2 text-slate-400 hover:text-slate-600">
-          <Bell className="w-6 h-6" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
-        </button>
-      </header>
-
-      <main className="flex-1 overflow-y-auto pb-24">
-        {renderContent()}
+        )}
       </main>
 
-      <nav className="bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center fixed bottom-0 max-w-md w-full shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50">
-        <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'dashboard' ? 'text-indigo-600 scale-110' : 'text-slate-400'}`}>
-          <LayoutDashboard className="w-6 h-6" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">홈</span>
-        </button>
-        <button onClick={() => setActiveTab('calc')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'calc' ? 'text-indigo-600 scale-110' : 'text-slate-400'}`}>
-          <Calculator className="w-6 h-6" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">계산기</span>
-        </button>
-        <button onClick={() => setActiveTab('timeline')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'timeline' ? 'text-indigo-600 scale-110' : 'text-slate-400'}`}>
-          <Calendar className="w-6 h-6" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">일정</span>
-        </button>
-        <button onClick={() => setActiveTab('coach')} className={`flex flex-col items-center gap-1 transition-all ${activeTab === 'coach' ? 'text-indigo-600 scale-110' : 'text-slate-400'}`}>
-          <MessageSquare className="w-6 h-6" />
-          <span className="text-[10px] font-bold uppercase tracking-wider">코치</span>
-        </button>
+      <nav className="bg-white/90 backdrop-blur-lg border-t border-slate-100 px-8 py-4 flex justify-between items-center fixed bottom-0 max-w-md w-full shadow-[0_-10px_30px_rgba(0,0,0,0.03)] z-[60]">
+        {[
+          { id: 'dashboard', icon: LayoutDashboard, label: '홈' },
+          { id: 'calc', icon: Calculator, label: '시뮬' },
+          { id: 'timeline', icon: Calendar, label: '일정' },
+          { id: 'coach', icon: MessageSquare, label: '코치' }
+        ].map((tab) => (
+          <button 
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)} 
+            className={`flex flex-col items-center gap-1.5 transition-all ${activeTab === tab.id ? 'text-indigo-600 scale-110' : 'text-slate-300 hover:text-slate-400'}`}
+          >
+            <tab.icon className={`w-6 h-6 ${activeTab === tab.id ? 'stroke-[2.5px]' : 'stroke-2'}`} />
+            <span className="text-[10px] font-bold tracking-tight">{tab.label}</span>
+          </button>
+        ))}
       </nav>
     </div>
   );
